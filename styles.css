@@ -1,0 +1,157 @@
+body {
+    font-family: Arial, sans-serif;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+.logo-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+.logo {
+    width: 150px;
+    transition: transform 0.3s ease-in-out;
+}
+.logo:hover {
+    transform: scale(1.1);
+}
+.qr-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 300px;
+    transition: transform 0.3s ease-in-out;
+}
+.qr-container:hover {
+    transform: scale(1.05);
+}
+h3 {
+    margin-bottom: 20px;
+    color: #333333;
+}
+.qr-container img {
+    width: 200px;
+    margin-bottom: 15px;
+}
+p {
+    color: #333333;
+}
+.access-button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.access-button:hover {
+    background-color: #0056b3;
+}
+@media (max-width: 600px) {
+    .logo {
+        width: 100px;
+    }
+    .qr-container {
+        width: 250px;
+    }
+    .qr-container img {
+        width: 150px;
+    }
+}
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+#map {
+    height: 70vh;
+    width: 100%;
+    margin-top: 60px;
+}
+
+#controls {
+    margin: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1;
+}
+
+#search-box {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px;
+}
+
+#search-button, #locate-button, #clear-button, #tour-button {
+    padding: 8px 16px; /* Reduce el tamaño del padding */
+    border: none;
+    border-radius: 50px; /* Hacer los botones redondos */
+    cursor: pointer;
+    background-color: #4285F4;
+    color: white;
+    font-size: 12px; /* Tamaño de fuente más pequeño */
+    transition: background-color 0.3s;
+}
+
+#search-button:hover, #locate-button:hover, #clear-button:hover, #tour-button:hover {
+    background-color: #357ae8;
+}
+
+#distance-info {
+    margin: 20px;
+}
+
+.info-window-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.info-window-content img {
+    max-width: 100px;
+    max-height: 100px;
+    margin-bottom: 10px;
+}
+
+.info-window-content button {
+    padding: 8px 12px;
+    border: none;
+    background-color: #4285F4;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#logo {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    width: 150px;
+    z-index: 1000;
+}
+
+#tour-button {
+    background-color: #34A853;
+}
+
+#tour-button:hover {
+    background-color: #2C8D40;
+}

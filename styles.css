@@ -71,19 +71,17 @@ p {
         width: 150px;
     }
 }
+#map {
+    height: 70vh;
+    width: 100%;
+    margin-top: 60px;
+}
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     position: relative;
 }
-
-#map {
-    height: 70vh;
-    width: 100%;
-    margin-top: 60px;
-}
-
 #controls {
     margin: 20px;
     display: flex;
@@ -91,45 +89,38 @@ body {
     gap: 10px;
     z-index: 1;
 }
-
 #search-box {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     width: 200px;
 }
-
-#search-button, #locate-button, #clear-button, #tour-button {
-    padding: 8px 16px; /* Reduce el tamaño del padding */
+button {
+    padding: 8px 16px;
     border: none;
-    border-radius: 50px; /* Hacer los botones redondos */
+    border-radius: 50px;
     cursor: pointer;
     background-color: #4285F4;
     color: white;
-    font-size: 12px; /* Tamaño de fuente más pequeño */
+    font-size: 12px;
     transition: background-color 0.3s;
 }
-
-#search-button:hover, #locate-button:hover, #clear-button:hover, #tour-button:hover {
+button:hover {
     background-color: #357ae8;
 }
-
 #distance-info {
     margin: 20px;
 }
-
 .info-window-content {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-
 .info-window-content img {
     max-width: 100px;
     max-height: 100px;
     margin-bottom: 10px;
 }
-
 .info-window-content button {
     padding: 8px 12px;
     border: none;
@@ -139,7 +130,6 @@ body {
     cursor: pointer;
     margin-top: 10px;
 }
-
 #logo {
     position: absolute;
     top: 10px;
@@ -147,11 +137,15 @@ body {
     width: 150px;
     z-index: 1000;
 }
-
 #tour-button {
     background-color: #34A853;
 }
-
+#end-tour-button {
+    background-color: #EA4335;
+}
 #tour-button:hover {
     background-color: #2C8D40;
+}
+#end-tour-button:hover {
+    background-color: #C13D30;
 }

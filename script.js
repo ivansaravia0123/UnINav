@@ -3,8 +3,12 @@ let markers = [];
 let userMarker;
 let selectedMarker = null;
 let userLocation = null;
+let zoomControl = true;
+let dragging = true;
+let scrollWheelZoom = true;
 let routeControl;
 let tourMarkers = [];
+
 
 let aulaLocations = [
     { name: "Ugb", location: [13.48911, -88.19229], image: "ugb.png" },
@@ -120,24 +124,33 @@ function getDirections() {
         return;
     }
 
+    // Definir la ubicación de la entrada de la universidad
+    const universityEntrance = [13.48920, -88.19242]; // Coordenadas de la entrada
+
+// Verificar si la ruta ya está controlada y actualizarla
     if (routeControl) {
         routeControl.setWaypoints([
             L.latLng(userLocation),
-            L.latLng(selectedMarker.getLatLng())
+            L.latLng(universityEntrance),  // Entrada como waypoint obligatorio
+            L.latLng(selectedMarker.getLatLng())  // Aula seleccionada
         ]);
     } else {
+        // Crear el control de la ruta si no existe
         routeControl = L.Routing.control({
             waypoints: [
                 L.latLng(userLocation),
-                L.latLng(selectedMarker.getLatLng())
+                L.latLng(universityEntrance),  // Entrada como waypoint obligatorio
+                L.latLng(selectedMarker.getLatLng())  // Aula seleccionada
             ],
             router: L.Routing.osrmv1({
                 serviceUrl: 'https://router.project-osrm.org/route/v1'
             }),
             lineOptions: {
-                styles: [{ color: 'blue', weight: 4 }]
+                styles: [{ color: 'blue', weight: 4 }]  // Línea de ruta de color azul
             },
-            createMarker: function() { return null; }
+            createMarker: function() { return null; },  // No crear marcadores adicionales
+            addWaypoints: false,  // No permitir añadir waypoints adicionales
+            routeWhileDragging: false  // No recalcular la ruta mientras se arrastra el mapa
         }).addTo(map);
     }
 }
@@ -173,17 +186,6 @@ function endTour() {
     tourMarkers.forEach(marker => marker.remove());
     tourMarkers = [];
     document.getElementById('end-tour-button').style.display = 'none';
-}
-
-function calculateDistance(latlng1, latlng2) {
-    const R = 6371000; // Radio de la Tierra en metros
-    const dLat = (latlng2.lat - latlng1[0]) * Math.PI / 180;
-    const dLng = (latlng2.lng - latlng1[1]) * Math.PI / 180;
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-              Math.cos(latlng1[0] * Math.PI / 180) * Math.cos(latlng2.lat * Math.PI / 180) *
-              Math.sin(dLng / 2) * Math.sin(dLng / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return R * c; // Distancia en metros
 }
 
 document.getElementById('search-button').addEventListener('click', performSearch);

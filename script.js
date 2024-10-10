@@ -3,13 +3,10 @@ let markers = [];
 let userMarker;
 let selectedMarker = null;
 let userLocation = null;
-let zoomControl = true;
-let dragging = true;
-let scrollWheelZoom = true;
 let routeControl;
 let tourMarkers = [];
 
-
+// Ubicaciones de aulas
 let aulaLocations = [
     { name: "Ugb", location: [13.48911, -88.19229], image: "ugb.png" },
     { name: "UGB store", location: [13.48861, -88.19211], image: "store.png" },
@@ -19,6 +16,7 @@ let aulaLocations = [
     { name: "Biblioteca UGB", location: [13.48861, -88.19184], image: "biblioteca.png" }
 ];
 
+// Ubicaciones del tour
 let tourLocations = [
     { name: "Punto 1", location: [13.48911, -88.19229], image: "360_image1.jpg" },
     { name: "Punto 2", location: [13.49010, -88.19336], image: "360_image2.jpg" },
@@ -68,29 +66,18 @@ function performSearch() {
             selectedMarker = marker;
             const aula = aulaLocations.find(a => a.name.toLowerCase().includes(query));
             showInfoWindow(aula, marker);
-
-            if (userMarker) {
-                userMarker.addTo(map);
-            }
-
-            if (userLocation) {
-                const distance = calculateDistance(userLocation, marker.getLatLng());
-                document.getElementById('distance-info').textContent = `Distancia a ${marker.options.title}: ${Math.round(distance)} metros`;
-            }
-
             document.getElementById('search-box').value = '';
         }
     });
 
     if (!found) {
         alert('Aula no encontrada. Por favor, intenta con otro nombre.');
-        document.getElementById('distance-info').textContent = '';
     }
 }
 
 function startWatchingUser() {
     if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(position => {
+        navigator.geolocation.getCurrentPosition(position => {
             userLocation = [position.coords.latitude, position.coords.longitude];
             if (userMarker) {
                 userMarker.setLatLng(userLocation);
@@ -105,14 +92,7 @@ function startWatchingUser() {
                 }).addTo(map);
             }
             map.setView(userLocation, 18);
-
-            if (routeControl) {
-                routeControl.setWaypoints([
-                    L.latLng(userLocation),
-                    L.latLng(selectedMarker.getLatLng())
-                ]);
-            }
-        });
+        }, showError);
     } else {
         alert("La geolocalización no está soportada por este navegador.");
     }
@@ -123,73 +103,56 @@ function getDirections() {
         alert("Por favor, asegúrate de que tu ubicación esté disponible y selecciona una aula.");
         return;
     }
-
-    // Definir la ubicación de la entrada de la universidad
-    const universityEntrance = [13.48920, -88.19242]; // Coordenadas de la entrada
-
-// Verificar si la ruta ya está controlada y actualizarla
-    if (routeControl) {
-        routeControl.setWaypoints([
+    routeControl = L.Routing.control({
+        waypoints: [
             L.latLng(userLocation),
-            L.latLng(universityEntrance),  // Entrada como waypoint obligatorio
-            L.latLng(selectedMarker.getLatLng())  // Aula seleccionada
-        ]);
-    } else {
-        // Crear el control de la ruta si no existe
-        routeControl = L.Routing.control({
-            waypoints: [
-                L.latLng(userLocation),
-                L.latLng(universityEntrance),  // Entrada como waypoint obligatorio
-                L.latLng(selectedMarker.getLatLng())  // Aula seleccionada
-            ],
-            router: L.Routing.osrmv1({
-                serviceUrl: 'https://router.project-osrm.org/route/v1'
-            }),
-            lineOptions: {
-                styles: [{ color: 'blue', weight: 4 }]  // Línea de ruta de color azul
-            },
-            createMarker: function() { return null; },  // No crear marcadores adicionales
-            addWaypoints: false,  // No permitir añadir waypoints adicionales
-            routeWhileDragging: false  // No recalcular la ruta mientras se arrastra el mapa
-        }).addTo(map);
+            L.latLng(selectedMarker.getLatLng())
+        ],
+        routeWhileDragging: true
+    }).addTo(map);
+}
+
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            alert("El usuario negó la solicitud de geolocalización.");
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert("La ubicación no está disponible.");
+            break;
+        case error.TIMEOUT:
+            alert("La solicitud de ubicación ha expirado.");
+            break;
+        case error.UNKNOWN_ERROR:
+            alert("Se ha producido un error desconocido.");
+            break;
     }
 }
 
-function clearSearch() {
-    markers.forEach(marker => marker.remove());
-    if (userMarker) {
-        userMarker.addTo(map);
-    }
-    document.getElementById('distance-info').textContent = '';
+window.onload = startWatchingUser; // Llamar a startWatchingUser al cargar la página
+
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('active');
 }
 
-function startTour() {
-    // Limpiar los marcadores anteriores
+// Añadir evento para el botón de abrir/cerrar el menú
+document.getElementById('toggle-button').addEventListener('click', toggleSidebar);
+document.getElementById('search-button').addEventListener('click', performSearch);
+document.getElementById('clear-button').addEventListener('click', () => {
     markers.forEach(marker => marker.remove());
-
-    // Mostrar los puntos del tour
+    document.getElementById('search-box').value = '';
+});
+document.getElementById('tour-button').addEventListener('click', () => {
+    tourMarkers.forEach(marker => marker.remove());
     tourLocations.forEach(tourLocation => {
-        let marker = L.marker(tourLocation.location).addTo(map).bindPopup(`
-            <div class="info-window-content">
-                <strong>${tourLocation.name}</strong>
-                <img src="${tourLocation.image}" alt="${tourLocation.name}">
-            </div>
-        `);
+        let marker = L.marker(tourLocation.location).addTo(map).bindPopup(tourLocation.name);
         tourMarkers.push(marker);
     });
-
-    // Mostrar el botón de "Cerrar Tour"
-    document.getElementById('end-tour-button').style.display = 'inline';
-}
-
-function endTour() {
+    alert('Tour iniciado.');
+});
+document.getElementById('end-tour-button').addEventListener('click', () => {
     tourMarkers.forEach(marker => marker.remove());
-    tourMarkers = [];
-    document.getElementById('end-tour-button').style.display = 'none';
-}
+    alert('Tour finalizado.');
+});
 
-document.getElementById('search-button').addEventListener('click', performSearch);
-document.getElementById('locate-button').addEventListener('click', startWatchingUser);
-document.getElementById('clear-button').addEventListener('click', clearSearch);
-document.getElementById('tour-button').addEventListener('click', startTour);
-document.getElementById('end-tour-button').addEventListener('click', endTour);

@@ -6,30 +6,32 @@
     <title>Mapa de Aulas de la Universidad</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
-    <link rel="stylesheet" href="styles.css"> <!-- Aquí enlazas tu CSS -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="controls">
-        <input id="search-box" type="text" placeholder="Buscar aula..." list="aulas-list">
-        <button id="search-button">Buscar</button>
-        <button id="locate-button">Ubicación</button>
-        <button id="clear-button">Limpiar</button>
-        <button id="tour-button">Tour</button>
-        <button id="end-tour-button" style="display:none;">Cerrar Tour</button>
-    </div>
-    <datalist id="aulas-list">
-        <option value="Ugb"></option>
-        <option value="Edificio Gerardo Barrio"></option>
-        <option value="Cancha Universitaria Gerardo Barrio"></option>
-        <option value="Auditorio"></option>
-        <option value="Biblioteca UGB"></option>
-    </datalist>
-    <div id="map"></div>
-    <div id="distance-info"></div>
+    <button id="toggle-button">☰</button> <!-- Botón para abrir/cerrar el menú -->
     
-
+    <div id="sidebar" class="sidebar">
+        <div id="controls">
+            <input id="search-box" type="text" placeholder="Buscar aula..." list="aulas-list">
+            <button id="search-button">Buscar</button>
+            <button id="clear-button">Limpiar</button>
+            <button id="tour-button">Tour</button>
+            <button id="end-tour-button" style="display:none;">Cerrar Tour</button>
+        </div>
+        <datalist id="aulas-list">
+            <option value="Ugb"></option>
+            <option value="Edificio Gerardo Barrio"></option>
+            <option value="Cancha Universitaria Gerardo Barrio"></option>
+            <option value="Auditorio"></option>
+            <option value="Biblioteca UGB"></option>
+        </datalist>
+    </div>
+    
+    <div id="map"></div>
+    
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
     <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
-    <script src="script.js"></script> <!-- Aquí enlazas tu JavaScript -->
+    <script src="script.js"></script>
 </body>
 </html>
